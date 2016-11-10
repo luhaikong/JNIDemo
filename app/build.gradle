@@ -1,0 +1,38 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 25
+    buildToolsVersion "25.0.0"
+    defaultConfig {
+        applicationId "com.example.lhk.jnidemo"
+        minSdkVersion 15
+        targetSdkVersion 25
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
+        ndk{
+            moduleName "JniDemo" // 设置生成的文件名
+            cFlags "-DANDROID_NDK -D_RELEASE" //这个对应的是生成模式
+            ldLibs "m", "log", "jnigraphics" //这个对应 LOCAL_LDLIBS 但是需要去掉前面的 “l”
+            //abiFilters "all" //这个是对应的 APP_ABI
+            abiFilters "armeabi", "armeabi-v7a", "x86"
+            stl "stlport_shared" //这个对应的是 APP_STL
+        }
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    })
+    compile 'com.android.support:appcompat-v7:25.0.0'
+    testCompile 'junit:junit:4.12'
+}
